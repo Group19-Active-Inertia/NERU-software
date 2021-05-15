@@ -4,6 +4,9 @@
 //  This file contains types and values for common use
 //  
 
+
+#include <iostream>
+#include <vector>
 #include <string>
 
 
