@@ -8,6 +8,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "commonTypes.hpp"
+#include "helpers.hpp"
+
 
 class LoginScreen {
 

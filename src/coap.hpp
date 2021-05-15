@@ -9,14 +9,9 @@
 #include <vector>
 #include <string>
 #include "disturbance.hpp"
+#include "commonTypes.hpp"
+#include "helpers.hpp"
 
-// CoAP radius in km
-#define CoAPRadius 10
-
-struct ipPort {
-    std::string ip;
-    int port;
-};
 
 class CoAPReceiver {
 
