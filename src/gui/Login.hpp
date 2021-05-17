@@ -7,12 +7,14 @@
 
 class LoginScreen {
 
-    void renderLoginScreen ();
     bool isValidUser ();
     std::vector<std::string> getPermittedSites ();
     void fetchCredentialFiles ();
     void saveCredentialFiles ();
     void fetchCoAPNetworkIPs ();
+
+    public:
+        void renderLoginScreen ();
 
 };
 
