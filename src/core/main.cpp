@@ -5,12 +5,12 @@
 //  
 
 
-#include "gui/Login.cpp"
-#include "coap/CoAP.cpp"
-#include "mqtt/MQTT.cpp"
-#include "disturbance/Disturbance.cpp"
-#include "CommonTypes.hpp"
-#include "Helpers.cpp"
+#include "../gui/Login.cpp"
+#include "../coap/CoAP.cpp"
+#include "../mqtt/MQTT.cpp"
+#include "../disturbance/Disturbance.cpp"
+#include "../CommonTypes.hpp"
+#include "../Helpers.cpp"
 
 
 int main () {
