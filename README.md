@@ -2,14 +2,22 @@
 
 ## Folder layout
 
-### **/src**
-Contains all (private) modules.
+### **/classes**
+Contains all custom classes.
 
-### **/include**
-Contains all public headers. Headers that are only used by one module are put into corresponding subdirectories. Headers used by multiple modules may be left in the top directory.
-
-### **/media**
-Contains all media which include icons, images etc.
+### **/doc**
+Contains all documentation.
 
 ### **/tests**
 Contains unit tests.
+
+
+## Communication between database
+The format for some of these has not been decided yet, database team please let us know what formats would be best for you.
+### Data read from database by the NERU
+1. All NERU IPs, corresponding ports, latitude and longitude. 
+2. Access to the MQTT broker, which can be a link to the downloadable credential files or the files themselves. (link would be preferred)
+
+### Data written to database by the NERU
+1. The NERU's own IP (in case it changes).
+2. New disturbance records
