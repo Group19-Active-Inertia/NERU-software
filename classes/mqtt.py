@@ -1,3 +1,5 @@
+from common import CommonValues
+
 import os
 from io import StringIO
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
@@ -116,18 +118,30 @@ class MQTT:
             except:
                 raise MQTTTopicSubscribeException(self.brokerInfo[topic])
 
-    def handleIncomingMessage(self):
+    def disturbanceMessageHandler(self, client, userdata, message):
         pass
 
-    def dispatchDisturbanceMessage(self):
-        pass
+    def updateMessageHandler(self, client, userdata, message):
+        msg = message.payload.decode("utf-8")
+        msgSplit = msg.split(" ")
+        updateType = msgSplit[0]
+        updateInfo = msgSplit[1:]
+
+        if updateType == "add":
+            CommonValues.addNearbyNERU(updateInfo)
+        elif updateType == "edit":
+            CommonValues.editNearbyNERUs(updateInfo)
+        elif updateType == "del":
+            CommonValues.removeNearbyNERU(updateInfo)
+        else:
+            raise MQTTInvalidUpdateMessage(msg)
 
     def dispatchDisturbanceMessage(self, publicIp):
         try:
             MQTTClient.publish(
-                self.brokerInfo["disturbanceTopic"], 
-                publicIp, 
-                self.brokerInfo["qosDisturbance"]
+                self.brokerInfo["disturbanceTopic"],
+                publicIp,
+                self.brokerInfo["qosDisturbance"],
             )
         except:
             raise MQTTPublishException
