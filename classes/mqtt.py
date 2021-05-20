@@ -62,7 +62,13 @@ class MQTT:
             raise MQTTBrokerConnectionException("Failed to connect to broker")
 
     def subscribeToTopic(self):
-        pass
+        try:
+            self.MQTTClient.connect()
+            self.MQTTClient.subscribe(self.brokerInfo["disturbanceTopic"], 
+                                    self.brokerInfo["qos"], 
+                                    self.incomingMessageHandler)
+        except:
+            raise MQTTTopicSubscribeException()
 
     def handleIncomingMessage(self):
         pass
