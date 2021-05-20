@@ -12,3 +12,12 @@
                 sin(rlat1) * sin(rlat2) + cos(rlat1) * cos(rlat2) * cos(rlon2 - rlon1)
             )
         )
+
+    # calculate nearby nerus from dict of nerus
+    # nerus format: {ip: [port, lat, lon]}
+    def setNearbyNERUs(nerus):
+        CommonValues.nearbyNERUs = [
+            (ip, port)
+            for (ip, (port, lat, lon)) in nerus.items()
+            if CommonValues.euclideanDistance(lat, lon) <= CommonValues.nearbyNERURadius
+        ]
