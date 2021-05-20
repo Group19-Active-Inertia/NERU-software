@@ -103,15 +103,18 @@ class MQTT:
             raise MQTTBrokerConnectionException
 
     def subscribeToTopic(self):
-        try:
-            self.MQTTClient.connect()
-            self.MQTTClient.subscribe(
-                self.brokerInfo["disturbanceTopic"],
-                self.brokerInfo["qos"],
-                self.incomingMessageHandler,
-            )
-        except:
-            raise MQTTTopicSubscribeException()
+        for (topic, qos, handler) in [
+            ("disturbanceTopic", "qosDisturbance", self.disturbanceMessageHandler),
+            ("updateTopic", "qosUpdate", self.updateMessageHandler),
+        ]:
+            try:
+                self.MQTTClient.subscribe(
+                    self.brokerInfo[topic],
+                    self.brokerInfo[qos],
+                    handler,
+                )
+            except:
+                raise MQTTTopicSubscribeException(self.brokerInfo[topic])
 
     def handleIncomingMessage(self):
         pass
