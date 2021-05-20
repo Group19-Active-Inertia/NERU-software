@@ -1,21 +1,18 @@
-
-
 class MQTT:
-    
-    def __init__ (self):
+    def __init__(self):
         pass
-    
-    def getBrokerCredentials (self):
+
+    def getBrokerCredentials(self):
         pass
-    
-    def connectToBroker (self):
+
+    def connectToBroker(self):
         pass
-    
-    def subscribeToTopic (self):
+
+    def subscribeToTopic(self):
         pass
-    
-    def handleIncomingMessage (self):
+
+    def handleIncomingMessage(self):
         pass
-    
-    def dispatchDisturbanceMessage (self):
+
+    def dispatchDisturbanceMessage(self):
         pass

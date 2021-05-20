@@ -1,15 +1,12 @@
-
-
 class Session:
-    
-    def __init__ (self):
+    def __init__(self):
         pass
-    
-    def attemptLogin (self):
+
+    def attemptLogin(self):
         pass
-    
-    def getMQTTFiles (self):
+
+    def getMQTTFiles(self):
         pass
-    
-    def getNeruIPs (self):
+
+    def getNeruIPs(self):
         pass
