@@ -8,20 +8,22 @@ from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 ### -----------------------------------------------------
 ### -----------------------------------------------------
 
+
 class MQTTBrokerCredentialException(Exception):
     pass
 
+
 class MQTTBrokerConnectionException(Exception):
     pass
+
 
 class MQTTTopicSubscribeException(Exception):
     def __init__(self, topic):
         self.topic = topic
         super().__init__(self.topic)
-        
+
     def __str__(self):
         return f"Failed to subscribe to topic {self.topic}"
-    pass
 
 
 ### -----------------------------------------------------
@@ -30,14 +32,15 @@ class MQTTTopicSubscribeException(Exception):
 ### -----------------------------------------------------
 ### -----------------------------------------------------
 
+
 class MQTT:
     def __init__(self):
         self.brokerInfo = {}
         self.getBrokerCredentials()
-        
+
         self.MQTTClient = None
         self.connectToBroker()
-        
+
         self.subscribeToTopic()
 
     def getBrokerCredentials(self):
@@ -57,22 +60,21 @@ class MQTT:
     def connectToBroker(self):
         try:
             # Init AWSIoTMQTTClient
-            self.MQTTClient = AWSIoTMQTTClient(
-                self.brokerInfo["clientId"]
-            )
+            self.MQTTClient = AWSIoTMQTTClient(self.brokerInfo["clientId"])
             self.MQTTClient.configureEndpoint(
-                self.brokerInfo["host"], 
-                self.brokerInfo["port"]
+                self.brokerInfo["host"], self.brokerInfo["port"]
             )
             self.MQTTClient.configureCredentials(
-                self.brokerInfo["rootCA"], 
-                self.brokerInfo["privateKey"], 
-                self.brokerInfo["certificate"]
+                self.brokerInfo["rootCA"],
+                self.brokerInfo["privateKey"],
+                self.brokerInfo["certificate"],
             )
 
             # AWSIoTMQTTClient connection configuration
             self.MQTTClient.configureAutoReconnectBackoffTime(1, 32, 20)
-            self.MQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
+            self.MQTTClient.configureOfflinePublishQueueing(
+                -1
+            )  # Infinite offline Publish queueing
             self.MQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
             self.MQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
             self.MQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
@@ -82,9 +84,11 @@ class MQTT:
     def subscribeToTopic(self):
         try:
             self.MQTTClient.connect()
-            self.MQTTClient.subscribe(self.brokerInfo["disturbanceTopic"], 
-                                    self.brokerInfo["qos"], 
-                                    self.incomingMessageHandler)
+            self.MQTTClient.subscribe(
+                self.brokerInfo["disturbanceTopic"],
+                self.brokerInfo["qos"],
+                self.incomingMessageHandler,
+            )
         except:
             raise MQTTTopicSubscribeException()
 
