@@ -10,12 +10,16 @@ from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 
 class MQTTBrokerCredentialException(Exception):
-    pass
+    def __str__(self):
+        return "Broker failed to initialise"
 
+class MQTTBrokerConfigurationException(Exception):
+    def __str__(self):
+        return "Failed to set broker configuration"
 
 class MQTTBrokerConnectionException(Exception):
-    pass
-
+    def __str__(self):
+        return "Failed to connect to broker"
 
 class MQTTTopicSubscribeException(Exception):
     def __init__(self, topic):
@@ -24,6 +28,10 @@ class MQTTTopicSubscribeException(Exception):
 
     def __str__(self):
         return f"Failed to subscribe to topic {self.topic}"
+    
+class MQTTPublishException(Exception):
+    def __str__(self):
+        return "Failed to publish message"
 
 
 ### -----------------------------------------------------
