@@ -30,3 +30,10 @@
             <= CommonValues.nearbyNERURadius
         ):
             CommonValues.nearbyNERUs.append((info[0], info[1]))
+
+    # remove nearby NERU from list
+    # info format: [ip]
+    def removeNearbyNERU(info):
+        CommonValues.nearbyNERUs = [
+            (ip, port) for (ip, port) in CommonValues.nearbyNERUs if ip != info[0]
+        ]
