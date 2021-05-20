@@ -1,3 +1,5 @@
+from common import CommonValues
+
 import aiocoap.resource as resource
 from aiocoap import *
 import asyncio
@@ -37,8 +39,6 @@ class CoAPDisturbance(resource.Resource):
 
 class CoAP:
     def __init__(self, radius: int):
-        self.nearbyNERURadius = radius
-        self.nearbyNERUs = []
 
         self.protocol = Context.create_client_context()
 
@@ -61,17 +61,5 @@ class CoAP:
             )
             self.protocol.request(msg)
 
-        for (ip, port) in self.nearbyNERUs:
+        for (ip, port) in CommonValues.nearbyNERUs:
             dispatchMessage(ip, port)
-
-    # calculate nearby nerus from list of nerus
-    def setNearbyNERUs(self, nerus: dict):
-        pass
-
-    # calculate if neru is nearby enough and add to list
-    def addNearbyNERU(self, neru: dict):
-        pass
-
-    # remove nearby NERU from list
-    def removeNearbyNERU(self, neru: str):
-        pass
