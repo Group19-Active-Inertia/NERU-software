@@ -16,7 +16,7 @@ class CoAP:
 
     def startServer(self):
         server = resource.Site()
-        server.add_resource(["d"], Disturbance())
+        server.add_resource(["d"], CoAPDisturbance())
 
         context = Context.create_server_context(server)
         asyncio.Task(context)
@@ -47,7 +47,7 @@ class CoAP:
 
 
 # handles incoming disturbances from CoAP
-class Disturbance(resource.Resource):
+class CoAPDisturbance(resource.Resource):
     async def render_get(self, request):
         # handle incoming disturbance
         # e.g.
