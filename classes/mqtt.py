@@ -105,3 +105,13 @@ class MQTT:
 
     def dispatchDisturbanceMessage(self):
         pass
+
+    def dispatchDisturbanceMessage(self, publicIp):
+        try:
+            MQTTClient.publish(
+                self.brokerInfo["disturbanceTopic"], 
+                publicIp, 
+                self.brokerInfo["qosDisturbance"]
+            )
+        except:
+            raise MQTTPublishException
