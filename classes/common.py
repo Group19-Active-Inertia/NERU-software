@@ -37,3 +37,11 @@
         CommonValues.nearbyNERUs = [
             (ip, port) for (ip, port) in CommonValues.nearbyNERUs if ip != info[0]
         ]
+
+    # edit neru ip
+    # info format: [oldIp, newIp]
+    def editNearbyNERU(info):
+        CommonValues.nearbyNERUs = [
+            (info[1], port) if ip == info[0] else (ip, port)
+            for (ip, port) in CommonValues.nearbyNERUs
+        ]
