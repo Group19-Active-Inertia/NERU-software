@@ -37,7 +37,29 @@ class MQTT:
             raise MQTTBrokerCredentialException("Broker failed to initialise")
 
     def connectToBroker(self):
-        pass
+        try:
+            # Init AWSIoTMQTTClient
+            self.MQTTClient = AWSIoTMQTTClient(
+                self.brokerInfo["clientId"]
+            )
+            self.MQTTClient.configureEndpoint(
+                self.brokerInfo["host"], 
+                self.brokerInfo["port"]
+            )
+            self.MQTTClient.configureCredentials(
+                self.brokerInfo["rootCA"], 
+                self.brokerInfo["privateKey"], 
+                self.brokerInfo["certificate"]
+            )
+
+            # AWSIoTMQTTClient connection configuration
+            self.MQTTClient.configureAutoReconnectBackoffTime(1, 32, 20)
+            self.MQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
+            self.MQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
+            self.MQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
+            self.MQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
+        except:
+            raise MQTTBrokerConnectionException("Failed to connect to broker")
 
     def subscribeToTopic(self):
         pass
