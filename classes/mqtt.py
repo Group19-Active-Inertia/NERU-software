@@ -89,14 +89,18 @@ class MQTT:
 
             # AWSIoTMQTTClient connection configuration
             self.MQTTClient.configureAutoReconnectBackoffTime(1, 32, 20)
-            self.MQTTClient.configureOfflinePublishQueueing(
-                -1
-            )  # Infinite offline Publish queueing
-            self.MQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
-            self.MQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
-            self.MQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
+            self.MQTTClient.configureOfflinePublishQueueing(-1)
+            self.MQTTClient.configureDrainingFrequency(2)
+            self.MQTTClient.configureConnectDisconnectTimeout(10)
+            self.MQTTClient.configureMQTTOperationTimeout(5)
         except:
-            raise MQTTBrokerConnectionException("Failed to connect to broker")
+            raise MQTTBrokerConfigurationException
+
+    def connectToBroker(self):
+        try:
+            self.MQTTClient.connect()
+        except:
+            raise MQTTBrokerConnectionException
 
     def subscribeToTopic(self):
         try:
