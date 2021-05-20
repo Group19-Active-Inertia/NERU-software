@@ -34,6 +34,15 @@ class MQTTPublishException(Exception):
         return "Failed to publish message"
 
 
+class MQTTInvalidUpdateMessage(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+    def __str__(self):
+        return f"Invalid update message received: {self.message}"
+
+
 ### -----------------------------------------------------
 ### -----------------------------------------------------
 ### -----------       MQTT Class    ---------------------
