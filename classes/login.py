@@ -13,3 +13,6 @@ class Session:
 
     def getNeruIPs(self):
         pass
+    
+    def getNeruDetails(self):
+        pass
