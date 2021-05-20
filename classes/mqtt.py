@@ -23,7 +23,18 @@ class MQTT:
         pass
 
     def getBrokerCredentials(self):
-        pass
+        try:
+            self.brokerInfo["qos"] = None
+            self.brokerInfo["host"] = None
+            self.brokerInfo["port"] = 8883
+            self.brokerInfo["rootCA"] = None
+            self.brokerInfo["privateKey"] = None
+            self.brokerInfo["certificatePath"] = None
+            self.brokerInfo["clientId"] = None
+            self.brokerInfo["disturbanceTopic"] = "d"
+            self.brokerInfo["updateTopic"] = "update"
+        except:
+            raise MQTTBrokerCredentialException("Broker failed to initialise")
 
     def connectToBroker(self):
         pass
