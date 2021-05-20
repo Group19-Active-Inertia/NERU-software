@@ -1,3 +1,7 @@
+import os
+from io import StringIO
+from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+
 ### -----------------------------------------------------
 ### -----------------------------------------------------
 ### -----------       Exceptions    ---------------------
@@ -18,9 +22,23 @@ class MQTTTopicSubscribeException(Exception):
     def __str__(self):
         return f"Failed to subscribe to topic {self.topic}"
     pass
+
+
+### -----------------------------------------------------
+### -----------------------------------------------------
+### -----------       MQTT Class    ---------------------
+### -----------------------------------------------------
+### -----------------------------------------------------
+
 class MQTT:
     def __init__(self):
-        pass
+        self.brokerInfo = {}
+        self.getBrokerCredentials()
+        
+        self.MQTTClient = None
+        self.connectToBroker()
+        
+        self.subscribeToTopic()
 
     def getBrokerCredentials(self):
         try:
