@@ -5,6 +5,9 @@ class Session:
     def attemptLogin(self):
         pass
 
+    def updateSiteIP(self):
+        pass
+
     def getMQTTFiles(self):
         pass
 
