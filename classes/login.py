@@ -5,7 +5,7 @@ class Session:
     def attemptLogin(self):
         pass
 
-    def updateSiteIP(self):
+    def updateLocalSiteIP(self):
         pass
 
     def getMQTTFiles(self):

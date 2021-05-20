@@ -15,13 +15,16 @@ class MQTTBrokerCredentialException(Exception):
     def __str__(self):
         return "Broker failed to initialise"
 
+
 class MQTTBrokerConfigurationException(Exception):
     def __str__(self):
         return "Failed to set broker configuration"
 
+
 class MQTTBrokerConnectionException(Exception):
     def __str__(self):
         return "Failed to connect to broker"
+
 
 class MQTTTopicSubscribeException(Exception):
     def __init__(self, topic):
@@ -30,7 +33,8 @@ class MQTTTopicSubscribeException(Exception):
 
     def __str__(self):
         return f"Failed to subscribe to topic {self.topic}"
-    
+
+
 class MQTTPublishException(Exception):
     def __str__(self):
         return "Failed to publish message"
@@ -56,6 +60,7 @@ class MQTT:
     def __init__(self):
         self.brokerInfo = {}
         self.getBrokerCredentials()
+        self.setBrokerConfiguration()
 
         self.MQTTClient = None
         self.connectToBroker()
@@ -64,19 +69,20 @@ class MQTT:
 
     def getBrokerCredentials(self):
         try:
-            self.brokerInfo["qos"] = None
             self.brokerInfo["host"] = None
             self.brokerInfo["port"] = 8883
             self.brokerInfo["rootCA"] = None
             self.brokerInfo["privateKey"] = None
-            self.brokerInfo["certificatePath"] = None
+            self.brokerInfo["certificate"] = None
             self.brokerInfo["clientId"] = None
             self.brokerInfo["disturbanceTopic"] = "d"
+            self.brokerInfo["qosDisturbance"] = 0
             self.brokerInfo["updateTopic"] = "update"
+            self.brokerInfo["qosUpdate"] = 0
         except:
-            raise MQTTBrokerCredentialException("Broker failed to initialise")
+            raise MQTTBrokerCredentialException
 
-    def connectToBroker(self):
+    def setBrokerConfiguration(self):
         try:
             # Init AWSIoTMQTTClient
             self.MQTTClient = AWSIoTMQTTClient(self.brokerInfo["clientId"])
