@@ -1,3 +1,18 @@
+from math import acos, sin, cos, pi
+
+# This class is used in common with all other modules
+# it is added so information does not have to be passed
+# between classes as it would become very muddled
+class CommonValues:
+    # radius in km
+    nearbyNERURadius = 100
+    nearbyNERUs = []
+
+    # local NERU device location. Accuracy depends on distance
+    # Within the UK: ± <1km error. Error increases to a few km for >3000km distances
+    # Coordinates below are of Imperial's EEE building
+    deviceLat, deviceLon = 51.499517, -0.176408
+
     # calculates euclidean distance from host neru location to point
     def euclideanDistance(lat, lon):
         rlat1, rlon1, rlat2, rlon2 = (
