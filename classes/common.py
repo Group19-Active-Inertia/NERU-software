@@ -21,3 +21,12 @@
             for (ip, (port, lat, lon)) in nerus.items()
             if CommonValues.euclideanDistance(lat, lon) <= CommonValues.nearbyNERURadius
         ]
+
+    # calculate if neru is nearby enough and add to list
+    # info format: [ip, port, lat, lon]
+    def addNearbyNERU(info):
+        if (
+            CommonValues.euclideanDistance(info[2], info[3])
+            <= CommonValues.nearbyNERURadius
+        ):
+            CommonValues.nearbyNERUs.append((info[0], info[1]))
