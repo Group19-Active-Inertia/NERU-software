@@ -4,6 +4,38 @@ import asyncio
 from multiprocessing import Process
 
 
+### -----------------------------------------------------
+### -----------------------------------------------------
+### -----------       Exceptions    ---------------------
+### -----------------------------------------------------
+### -----------------------------------------------------
+
+
+
+
+### -----------------------------------------------------
+### -----------------------------------------------------
+### -----------      CoAP Resources    ------------------
+### -----------------------------------------------------
+### -----------------------------------------------------
+
+# handles incoming disturbances from CoAP
+class CoAPDisturbance(resource.Resource):
+    async def render_get(self, request):
+        # handle incoming disturbance
+        # e.g.
+        #
+        # if not_prepared_for_disturbance:
+        #    prepare_for_disturbance()
+        return
+
+
+### -----------------------------------------------------
+### -----------------------------------------------------
+### ---------------    CoAP Class    --------------------
+### -----------------------------------------------------
+### -----------------------------------------------------
+
 class CoAP:
     def __init__(self, radius: int):
         self.nearbyNERURadius = radius
@@ -44,14 +76,3 @@ class CoAP:
     # remove nearby NERU from list
     def removeNearbyNERU(self, neru: str):
         pass
-
-
-# handles incoming disturbances from CoAP
-class CoAPDisturbance(resource.Resource):
-    async def render_get(self, request):
-        # handle incoming disturbance
-        # e.g.
-        #
-        # if not_prepared_for_disturbance:
-        #    prepare_for_disturbance()
-        return
