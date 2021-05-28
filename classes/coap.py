@@ -41,20 +41,21 @@ class CoAPDisturbance(resource.Resource):
 
 
 class CoAP():
-    def __init__(self, radius: int = 100, _ip: str = "0.0.0.0", _port: int = 5683):
-        super().__init__()
+    def __init__(self, radius: int = 100, ip: str = "0.0.0.0", port: int = 5683, *args):
         print("Init CoAP!")
         CommonValues.nearbyNERURadius = radius
         self.protocol = Context.create_client_context()
         #time.sleep(2)
         #self.protocol = None
-        self._ip = _ip
-        self._port = _port
+        self._ip = ip
+        self._port = port
 
         # Need to use multiprocessing because it makes the server non-blocking
         self.server = Process(target=self.startServer).start()
 
         #asyncio.run(self.startClient())
+
+        super().__init__(*args)
 
     def startServer(self):
         server = resource.Site()

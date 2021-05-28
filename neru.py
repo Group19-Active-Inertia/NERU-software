@@ -5,19 +5,20 @@ import threading
 import json
 import datetime
 import asyncio
+import sys
 
-class NeruHandler(MQTT, CoAP):
-    def __init__(self):
-        super().__init__()
+class NeruHandler(CoAP, MQTT):
+    def __init__(self, radius=100, ip="0.0.0.0", port=5683):
+        super().__init__(radius, ip, port)
 
 if __name__ == "__main__":
 
-    neruhandler = NeruHandler()
+    neruhandler = NeruHandler(port = int(sys.argv[2]))
 
     #coap = CoAP()
     #neruhandler.startServer()
 
-    CommonValues.setNearbyNERUs({"2.31.150.98": [5683, 51, 0]})
+    CommonValues.setNearbyNERUs({sys.argv[1]: [int(sys.argv[2]), 51, 0]})
     disturbance =  json.dumps({
                 'device_id_1': 'E56!w3se',
                 'location_1': [51.5476363, 56.6376463],

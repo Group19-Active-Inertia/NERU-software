@@ -57,8 +57,7 @@ class MQTTInvalidUpdateMessage(Exception):
 
 
 class MQTT():
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args):
         print("Init MQTT!")
         self.brokerInfo = {}
         self.MQTTClient = None
@@ -68,6 +67,8 @@ class MQTT():
         self.connectToBroker()
 
         self.subscribeToTopic()
+
+        super().__init__(*args)
 
     def getBrokerCredentials(self):
         try:
