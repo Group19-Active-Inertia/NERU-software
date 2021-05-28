@@ -1,4 +1,4 @@
-from common import CommonValues
+from .common import CommonValues
 
 import os
 from io import StringIO
@@ -56,26 +56,29 @@ class MQTTInvalidUpdateMessage(Exception):
 ### -----------------------------------------------------
 
 
-class MQTT:
+class MQTT():
     def __init__(self):
+        super().__init__()
+        print("Init MQTT!")
         self.brokerInfo = {}
+        self.MQTTClient = None
         self.getBrokerCredentials()
         self.setBrokerConfiguration()
 
-        self.MQTTClient = None
         self.connectToBroker()
 
         self.subscribeToTopic()
 
     def getBrokerCredentials(self):
         try:
-            self.brokerInfo["host"] = None
+            cwd = os.path.dirname(os.path.abspath(__file__))
+            self.brokerInfo["host"] = "a3ccusvtjpdwda-ats.iot.eu-west-2.amazonaws.com"
             self.brokerInfo["port"] = 8883
-            self.brokerInfo["rootCA"] = None
-            self.brokerInfo["privateKey"] = None
-            self.brokerInfo["certificate"] = None
-            self.brokerInfo["clientId"] = None
-            self.brokerInfo["disturbanceTopic"] = "d"
+            self.brokerInfo["rootCA"] = os.path.join(cwd,"Amazon-root-CA-1.pem")
+            self.brokerInfo["privateKey"] = os.path.join(cwd,"private.pem.key")
+            self.brokerInfo["certificate"] = os.path.join(cwd,"device.pem.crt")
+            self.brokerInfo["clientId"] = ""
+            self.brokerInfo["disturbanceTopic"] = "iot/topic"
             self.brokerInfo["qosDisturbance"] = 0
             self.brokerInfo["updateTopic"] = "update"
             self.brokerInfo["qosUpdate"] = 0
@@ -142,11 +145,11 @@ class MQTT:
         else:
             raise MQTTInvalidUpdateMessage(msg)
 
-    def dispatchDisturbanceMessage(self, publicIp):
+    def dispatchDisturbanceMessage(self, disturbance):
         try:
-            MQTTClient.publish(
+            self.MQTTClient.publish(
                 self.brokerInfo["disturbanceTopic"],
-                publicIp,
+                disturbance,
                 self.brokerInfo["qosDisturbance"],
             )
         except:

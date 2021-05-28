@@ -1,10 +1,9 @@
-from common import CommonValues
+from .common import CommonValues
 
 import aiocoap.resource as resource
 from aiocoap import *
 import asyncio
 from multiprocessing import Process
-
 
 ### -----------------------------------------------------
 ### -----------------------------------------------------
@@ -21,13 +20,17 @@ from multiprocessing import Process
 
 # handles incoming disturbances from CoAP
 class CoAPDisturbance(resource.Resource):
-    async def render_get(self, request):
+    #def __init__(self):
+    #        super().__init__()
+
+    async def render_post(self, request):
         # handle incoming disturbance
         # e.g.
+        print("POST request received: %s" % request.payload.decode("utf-8") )
         #
         # if not_prepared_for_disturbance:
         #    prepare_for_disturbance()
-        return
+        return Message()
 
 
 ### -----------------------------------------------------
@@ -37,29 +40,43 @@ class CoAPDisturbance(resource.Resource):
 ### -----------------------------------------------------
 
 
-class CoAP:
-    def __init__(self, radius: int):
-
+class CoAP():
+    def __init__(self, radius: int = 100, _ip: str = "0.0.0.0", _port: int = 5683):
+        super().__init__()
+        print("Init CoAP!")
+        CommonValues.nearbyNERURadius = radius
         self.protocol = Context.create_client_context()
+        #time.sleep(2)
+        #self.protocol = None
+        self._ip = _ip
+        self._port = _port
 
         # Need to use multiprocessing because it makes the server non-blocking
         self.server = Process(target=self.startServer).start()
+
+        #asyncio.run(self.startClient())
 
     def startServer(self):
         server = resource.Site()
         server.add_resource(["d"], CoAPDisturbance())
 
-        context = Context.create_server_context(server)
+        context = Context.create_server_context(server, (self._ip, self._port))
         asyncio.Task(context)
 
         asyncio.get_event_loop().run_forever()
 
-    def dispatchDisturbanceMessages(self, disturbance):
+    '''async def startClient(self):
+        self.protocol = await Context.create_client_context()'''
+
+    async def dispatchDisturbanceMessages(self, disturbance):
+        #Error arises if self.protocol used, so handle used as a workaround
+        #TODO: Allow direct reference to self.protocol
+        handle = await Context.create_client_context()
         async def dispatchMessage(ip, port):
             msg = Message(
                 code=POST, mtype=NON, payload=disturbance, uri=f"coap://{ip}:{port}/d"
             )
-            self.protocol.request(msg)
-
-        for (ip, port) in CommonValues.nearbyNERUs:
-            dispatchMessage(ip, port)
+            response = await handle.request(msg).response
+            #response = await self.protocol.request(msg).response
+            print(response)
+        await asyncio.gather(*(dispatchMessage(ip, port) for (ip, port) in CommonValues.nearbyNERUs))
