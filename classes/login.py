@@ -1,3 +1,9 @@
+import json
+import requests
+from getpass import getpass
+import time
+import threading
+
 class Session:
     endpointNames = {
         "nerus": "items"
@@ -65,7 +71,8 @@ class Session:
         pass
 
     def getNeruIPs(self):
-        pass
+        req = requests.get(Session.nerusUrl)
+        return req.json()
 
     def getNeruDetails(self):
         pass
