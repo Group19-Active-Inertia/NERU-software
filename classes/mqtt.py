@@ -132,6 +132,7 @@ class MQTT():
         pass
 
     def updateMessageHandler(self, client, userdata, message):
+        #TODO: Change format of messages received to assume they are json(?)
         msg = message.payload.decode("utf-8")
         msgSplit = msg.split(" ")
         updateType = msgSplit[0]
@@ -143,12 +144,17 @@ class MQTT():
             CommonValues.editNearbyNERUs(updateInfo)
         elif updateType == "del":
             CommonValues.removeNearbyNERU(updateInfo)
+        elif updateType == "sched":
+            self.scheduler_update(updateInfo)
         else:
             raise MQTTInvalidUpdateMessage(msg)
 
-    def dispatchDisturbanceMessage(self, disturbance):
+    def scheduler_update(self, updateInfo):
+        pass
+
+    async def dispatchDisturbanceMessage(self, disturbance):
         try:
-            self.MQTTClient.publish(
+            await self.MQTTClient.publish(
                 self.brokerInfo["disturbanceTopic"],
                 disturbance,
                 self.brokerInfo["qosDisturbance"],
