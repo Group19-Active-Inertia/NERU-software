@@ -1,9 +1,9 @@
 from .common import CommonValues
 
-import os
+import os, sys
 from io import StringIO
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-
+import datetime
 ### -----------------------------------------------------
 ### -----------------------------------------------------
 ### -----------       Exceptions    ---------------------
@@ -129,7 +129,10 @@ class MQTT():
                 raise MQTTTopicSubscribeException(self.brokerInfo[topic])
 
     def disturbanceMessageHandler(self, client, userdata, message):
-        pass
+        date = datetime.datetime.now()
+        print("MQTT Message Received:", message)
+        print("At Time:", date)
+        #pass
 
     def updateMessageHandler(self, client, userdata, message):
         #TODO: Change format of messages received to assume they are json(?)
@@ -137,6 +140,11 @@ class MQTT():
         msgSplit = msg.split(" ")
         updateType = msgSplit[0]
         updateInfo = msgSplit[1:]
+
+        date = datetime.datetime.now()
+
+        print("MQTT Message Received:", msg)
+        print("At Time:", date)
 
         if updateType == "add":
             CommonValues.addNearbyNERU(updateInfo)
@@ -149,15 +157,21 @@ class MQTT():
         else:
             raise MQTTInvalidUpdateMessage(msg)
 
+        #print("MQTT Message Received:", msg)
+        #sys.stdout.flush()
+
     def scheduler_update(self, updateInfo):
         pass
 
-    async def dispatchDisturbanceMessage(self, disturbance):
+    def dispatchDisturbanceMessage(self, disturbance):
         try:
-            await self.MQTTClient.publish(
+            self.MQTTClient.publish(
                 self.brokerInfo["disturbanceTopic"],
                 disturbance,
                 self.brokerInfo["qosDisturbance"],
             )
         except:
             raise MQTTPublishException
+
+        print("MQTT Message Published:", disturbance)
+        #sys.stdout.flush()
