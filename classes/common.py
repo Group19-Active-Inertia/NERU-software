@@ -11,7 +11,7 @@ class CommonValues:
     # local NERU device location. Accuracy depends on distance
     # Within the UK: ± <1km error. Error increases to a few km for >3000km distances
     # Coordinates below are of Imperial's EEE building
-    deviceLat, deviceLon = 52.4862, -1.8904
+    deviceLat, deviceLon = 51.36972005698434, -0.07820504197321534
     device_id_1 = "Newcastle 1"
     # calculates euclidean distance from host neru location to point
     def euclideanDistance(lat, lon):

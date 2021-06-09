@@ -35,6 +35,10 @@ class CoAPDisturbance(resource.Resource):
         print("POST request received: %s" % request.payload.decode("utf-8") )
         print("At time:", date)
 
+        msg = json.loads(request.payload.decode("utf-8"))
+
+        print("Delay:", str(date - datetime.datetime.strptime(msg["time"], "%Y-%m-%d %H:%M:%S.%f")))
+
         '''msg = json.loads(request.payload.decode("utf-8"))
 
         msgRecv = json.dumps({

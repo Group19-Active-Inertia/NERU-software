@@ -80,13 +80,13 @@ class NeruHandler(CoAP, MQTT):
 
 if __name__ == "__main__":
 
-    neruhandler = NeruHandler(port = int(sys.argv[2])) #, ip = "192.168.1.222")
+    neruhandler = NeruHandler(500, port = int(sys.argv[2])) #, ip = "192.168.1.222")
 
     #coap = CoAP()
     #neruhandler.startServer()
 
-    CommonValues.setNearbyNERUs({sys.argv[1]: [int(sys.argv[2]), 52.48, -1.89]})
-    CommonValues.setDeviceID = "Birmingham 1"
+    CommonValues.setNearbyNERUs({sys.argv[1]: [int(sys.argv[2]), 54.975123382631736, -1.6478403158353487]})
+    CommonValues.setDeviceID("London 2")
     '''CurrentIP': neruhandler._ip,
     'ID': 'E56!w3se',
     'Latitude': CommonValues.deviceLat,

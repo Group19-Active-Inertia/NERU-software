@@ -135,7 +135,9 @@ class MQTT():
         date = datetime.datetime.now()
         print("MQTT Message Received:", message.payload.decode("utf-8"))
         print("At Time:", date)
+
         msgRecv = json.loads(message.payload.decode("utf-8"))
+        print("Delay:", str(date - datetime.datetime.strptime(msgRecv["time"], "%Y-%m-%d %H:%M:%S.%f")))
 
         try:
             self.MQTTClient.publish(
