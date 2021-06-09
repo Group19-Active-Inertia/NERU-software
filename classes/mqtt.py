@@ -4,6 +4,7 @@ import os, sys
 from io import StringIO
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 import datetime
+import json
 ### -----------------------------------------------------
 ### -----------------------------------------------------
 ### -----------       Exceptions    ---------------------
@@ -83,6 +84,8 @@ class MQTT():
             self.brokerInfo["qosDisturbance"] = 0
             self.brokerInfo["updateTopic"] = "update"
             self.brokerInfo["qosUpdate"] = 0
+            self.brokerInfo["arriveTopic"] = "firebase"
+            self.brokerInfo["qosArrive"] = 0
         except:
             raise MQTTBrokerCredentialException
 
@@ -130,8 +133,24 @@ class MQTT():
 
     def disturbanceMessageHandler(self, client, userdata, message):
         date = datetime.datetime.now()
-        print("MQTT Message Received:", message)
+        print("MQTT Message Received:", message.payload.decode("utf-8"))
         print("At Time:", date)
+        msgRecv = json.loads(message.payload.decode("utf-8"))
+
+        try:
+            self.MQTTClient.publish(
+                self.brokerInfo["arriveTopic"],
+                json.dumps({
+                    "device_id_1": CommonValues.device_id_1,
+                    "message received": msgRecv,
+                    "message type": "MQTT",
+                    "duration":  str(date - datetime.datetime.strptime(msgRecv["time"], "%Y-%m-%d %H:%M:%S.%f")),
+                    "time": str(date)
+                }),
+                self.brokerInfo["qosArrive"],
+            )
+        except:
+            raise MQTTPublishException
         #pass
 
     def updateMessageHandler(self, client, userdata, message):
@@ -172,6 +191,18 @@ class MQTT():
             )
         except:
             raise MQTTPublishException
-
-        print("MQTT Message Published:", disturbance)
+        date = datetime.datetime.now()
+        #print("MQTT Message Published:", disturbance)
+        #print("At Time:", date)
         #sys.stdout.flush()
+
+    def arrivalMessage(self, data):
+        try:
+            self.MQTTClient.publish(
+                self.brokerInfo["arriveTopic"],
+                data,
+                self.brokerInfo["qosArrive"],
+            )
+        except:
+            raise MQTTPublishException
+

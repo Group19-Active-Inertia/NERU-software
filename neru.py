@@ -6,7 +6,7 @@ import json
 import datetime, time
 import asyncio
 import sys
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from multiprocessing import Process
 
 class NeruHandler(CoAP, MQTT):
@@ -22,7 +22,9 @@ class NeruHandler(CoAP, MQTT):
         # run blocking function in another thread,
         # and wait for it's result:
         await asyncio.get_event_loop().run_in_executor(self._mqtt_executor, self.dispatchDisturbanceMessage, disturbance)
-
+        #await p = Process(target=mqtt_publish, args=( , ))
+        #p.start()
+        #p.join()
     def scheduler_update(self, updateInfo):
         #Parse string updateInfo into datetime format
         #TODO: Update to parse json(?)
@@ -55,7 +57,7 @@ class NeruHandler(CoAP, MQTT):
                 disturbance =  json.dumps({
                     'Latitude': CommonValues.deviceLat,
                     'Longitude': CommonValues.deviceLon,
-                    'device_id_1': 'London 1',
+                    'device_id_1': CommonValues.device_id_1,
                     'time': str(datetime.datetime.now()),
                     'type': 'Other type 1'
                 })
@@ -73,15 +75,18 @@ class NeruHandler(CoAP, MQTT):
                 #self.dispatchDisturbanceMessage(disturbance)
                 await asyncio.gather(self.dispatchDisturbanceMessages(disturbance.encode("utf-8")), self.mqtt_dispatch(disturbance))
 
+    def arrivalFunction(self, data):
+        self.arrivalMessage(data)
+
 if __name__ == "__main__":
 
-    neruhandler = NeruHandler(port = int(sys.argv[2]))
+    neruhandler = NeruHandler(port = int(sys.argv[2])) #, ip = "192.168.1.222")
 
     #coap = CoAP()
     #neruhandler.startServer()
 
-    CommonValues.setNearbyNERUs({sys.argv[1]: [int(sys.argv[2]), 51, 0]})
-
+    CommonValues.setNearbyNERUs({sys.argv[1]: [int(sys.argv[2]), 52.48, -1.89]})
+    CommonValues.setDeviceID = "Birmingham 1"
     '''CurrentIP': neruhandler._ip,
     'ID': 'E56!w3se',
     'Latitude': CommonValues.deviceLat,
@@ -104,7 +109,7 @@ if __name__ == "__main__":
         disturbance =  json.dumps({
                 'Latitude': CommonValues.deviceLat,
                 'Longitude': CommonValues.deviceLon,
-                'device_id_1': 'London 1',
+                'device_id_1': CommonValues.device_id_1,
                 'time': str(datetime.datetime.now()),
                 'type': 'Other type 1'
             })
