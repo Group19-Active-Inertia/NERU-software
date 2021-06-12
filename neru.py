@@ -120,7 +120,7 @@ class NeruHandler(CoAP, Process):
                      'Port': self._port'''
                 #asyncio.get_event_loop().run_until_complete(asyncio.gather(self.dispatchDisturbanceMessages(disturbance.encode("utf-8")), self.mqtt_dispatch(disturbance)))
                 #self.dispatchDisturbanceMessage(disturbance)
-                #publish_queue.send(disturbance)
+                publish_queue.send(disturbance)
                 await asyncio.wait_for(self.dispatchDisturbanceMessages(disturbance.encode("utf-8")), timeout=0.3) #, self.mqtt_dispatch(disturbance))
 
     '''def arrivalFunction(self, data):

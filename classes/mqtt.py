@@ -141,20 +141,15 @@ class MQTT():
               "\nDelay:", str(date - datetime.datetime.strptime(msgRecv["time"], "%Y-%m-%d %H:%M:%S.%f")),
               "\n-----------------------------------------------------------------------------------------------")
 
-        try:
-            self.MQTTClient.publish(
-                self.brokerInfo["arriveTopic"],
-                json.dumps({
+        data = json.dumps({
                     "device_id_1": CommonValues.device_id_1,
                     "message received": msgRecv,
                     "message type": "MQTT",
                     "duration":  str(date - datetime.datetime.strptime(msgRecv["time"], "%Y-%m-%d %H:%M:%S.%f")),
                     "time": str(date)
-                }),
-                self.brokerInfo["qosArrive"],
-            )
-        except:
-            raise MQTTPublishException
+                })
+
+        self.arrivalMessage(data)
         #pass
 
     def updateMessageHandler(self, client, userdata, message):
