@@ -81,11 +81,11 @@ class MQTT():
             self.brokerInfo["privateKey"] = os.path.join(cwd,"private.pem.key")
             self.brokerInfo["certificate"] = os.path.join(cwd,"device.pem.crt")
             self.brokerInfo["clientId"] = ""
-            self.brokerInfo["disturbanceTopic"] = "iot_topic"
+            self.brokerInfo["disturbanceTopic"] = "iot/topic"
             self.brokerInfo["qosDisturbance"] = 0
-            self.brokerInfo["updateTopic"] = "update2"
+            self.brokerInfo["updateTopic"] = "update"
             self.brokerInfo["qosUpdate"] = 0
-            self.brokerInfo["arriveTopic"] = "firebase1"
+            self.brokerInfo["arriveTopic"] = "firebase"
             self.brokerInfo["qosArrive"] = 0
         except:
             raise MQTTBrokerCredentialException
