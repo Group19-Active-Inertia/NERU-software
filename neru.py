@@ -6,9 +6,9 @@ import json
 import datetime, time
 import asyncio
 import sys
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+#from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from multiprocessing import Process, Pipe, Value, Manager
-from threading import Thread
+#from threading import Thread
 
 class MQTTScheduler(MQTT):
 
@@ -120,7 +120,7 @@ class NeruHandler(CoAP, Process):
                      'Port': self._port'''
                 #asyncio.get_event_loop().run_until_complete(asyncio.gather(self.dispatchDisturbanceMessages(disturbance.encode("utf-8")), self.mqtt_dispatch(disturbance)))
                 #self.dispatchDisturbanceMessage(disturbance)
-                publish_queue.send(disturbance)
+                #publish_queue.send(disturbance)
                 await asyncio.wait_for(self.dispatchDisturbanceMessages(disturbance.encode("utf-8")), timeout=0.3) #, self.mqtt_dispatch(disturbance))
 
     '''def arrivalFunction(self, data):
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     task_queue, publish_queue = Pipe()
 
 
-    neruhandler = NeruHandler(task_queue, 4000, port = int(sys.argv[2])) #, ip = "192.168.1.222")
+    neruhandler = NeruHandler(task_queue, publish_queue, 4000, port = int(sys.argv[2])) #, ip = "192.168.1.222")
 
 
     #mqttQueue = MQTTQueue(task_queue)
