@@ -25,11 +25,9 @@ class MQTTScheduler(MQTT):
         #print(updateInfo)
         try:
             if updateInfo[0] == "clear": self.event_list.clear()
-            else: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S.%f"))
-
-        except:
-            if updateInfo[0] == "clear": self.event_list.clear()
-            else: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S"))
+            else if updateInfo[1] == 10: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S.%f"))
+            else if updateInfo[1] == 8: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S"))
+            #else: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S"))
 
         self.event_list.sort()
         #print(self.event_list)
