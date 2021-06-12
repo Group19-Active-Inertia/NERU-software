@@ -58,7 +58,7 @@ class MQTTInvalidUpdateMessage(Exception):
 
 
 class MQTT():
-    def __init__(self, *args):
+    def __init__(self, subscriber=False, *args):
         print("Init MQTT!")
         self.brokerInfo = {}
         self.MQTTClient = None
@@ -67,7 +67,8 @@ class MQTT():
 
         self.connectToBroker()
 
-        self.subscribeToTopic()
+        if subscriber:
+            self.subscribeToTopic()
 
         super().__init__(*args)
 
@@ -80,11 +81,11 @@ class MQTT():
             self.brokerInfo["privateKey"] = os.path.join(cwd,"private.pem.key")
             self.brokerInfo["certificate"] = os.path.join(cwd,"device.pem.crt")
             self.brokerInfo["clientId"] = ""
-            self.brokerInfo["disturbanceTopic"] = "iot/topic"
+            self.brokerInfo["disturbanceTopic"] = "iot_topic"
             self.brokerInfo["qosDisturbance"] = 0
-            self.brokerInfo["updateTopic"] = "update"
+            self.brokerInfo["updateTopic"] = "update2"
             self.brokerInfo["qosUpdate"] = 0
-            self.brokerInfo["arriveTopic"] = "firebase"
+            self.brokerInfo["arriveTopic"] = "firebase1"
             self.brokerInfo["qosArrive"] = 0
         except:
             raise MQTTBrokerCredentialException
@@ -133,11 +134,12 @@ class MQTT():
 
     def disturbanceMessageHandler(self, client, userdata, message):
         date = datetime.datetime.now()
-        print("MQTT Message Received:", message.payload.decode("utf-8"))
-        print("At Time:", date)
-
         msgRecv = json.loads(message.payload.decode("utf-8"))
-        print("Delay:", str(date - datetime.datetime.strptime(msgRecv["time"], "%Y-%m-%d %H:%M:%S.%f")))
+        print("-----------------------------------------------------------------------------------------------",
+              "\nMQTT Message Received:", message.payload.decode("utf-8"),
+              "\nAt Time:", date,
+              "\nDelay:", str(date - datetime.datetime.strptime(msgRecv["time"], "%Y-%m-%d %H:%M:%S.%f")),
+              "\n-----------------------------------------------------------------------------------------------")
 
         try:
             self.MQTTClient.publish(

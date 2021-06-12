@@ -1,5 +1,5 @@
 from .common import CommonValues
-#import .mqtt
+from .mqtt import MQTT
 import aiocoap.resource as resource
 from aiocoap import *
 import asyncio
@@ -22,47 +22,42 @@ import json
 ### -----------------------------------------------------
 
 # handles incoming disturbances from CoAP
-class CoAPDisturbance(resource.Resource):
+class CoAPDisturbance(resource.Resource, MQTT):
     def __init__(self): #, Handler, function):
         #self.arrival_func = function
         #self.Handler = Handler
-        super().__init__()
+        self.brokerInfo = {}
+        self.MQTTClient = None
+        self.getBrokerCredentials()
+        self.setBrokerConfiguration()
+
+        self.connectToBroker()
+
+        #self.subscribeToTopic()
+        #super().__init__()
 
     async def render_post(self, request):
         # handle incoming disturbance
         # e.g.
         date = datetime.datetime.now()
-        print("POST request received: %s" % request.payload.decode("utf-8") )
-        print("At time:", date)
 
         msg = json.loads(request.payload.decode("utf-8"))
 
-        print("Delay:", str(date - datetime.datetime.strptime(msg["time"], "%Y-%m-%d %H:%M:%S.%f")))
-
-        '''msg = json.loads(request.payload.decode("utf-8"))
+        print("-----------------------------------------------------------------------------------------------",
+              "\nPOST request received: %s" % request.payload.decode("utf-8"),
+              "\nAt time:", date,
+              "\nDelay:", str(date - datetime.datetime.strptime(msg["time"], "%Y-%m-%d %H:%M:%S.%f")),
+              "\n-----------------------------------------------------------------------------------------------")
 
         msgRecv = json.dumps({
                     "device_id_1": CommonValues.device_id_1,
                     "message received": msg,
-                    "message type": "MQTT",
+                    "message type": "CoAP",
                     "duration":  str(date - datetime.datetime.strptime(msg["time"], "%Y-%m-%d %H:%M:%S.%f")),
                     "time": str(date)
                   })
 
-        try:
-            self.MQTTClient.publish(
-                self.brokerInfo["arriveTopic"],
-                json.dumps({
-                    "device_id_1": CommonValues.device_id_1,
-                    "message received": msg,
-                    "message type": "MQTT",
-                    "duration":  str(date - datetime.datetime.strptime(msg["time"], "%Y-%m-%d %H:%M:%S.%f")),
-                    "time": str(date)
-                }),
-                self.brokerInfo["qosArrive"],
-            )
-        except:
-            raise Error #MQTTPublishException'''
+        self.arrivalMessage(msgRecv)
 
         #self.arrival_func(self.Handler, msgRecv)
         #sys.stdout.flush()
@@ -100,10 +95,10 @@ class CoAP():
     async def init_Client(self):
         self.protocol =  await Context.create_client_context()
 
-    def arrivalFunction(self, data):
+    '''def arrivalFunction(self, data):
         print("base arrivalFunction executed!")
         self.arrivalMessage(data)
-        pass
+        pass'''
 
     def startServer(self):
         server = resource.Site()
