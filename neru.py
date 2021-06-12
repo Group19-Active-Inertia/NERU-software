@@ -23,11 +23,15 @@ class MQTTScheduler(MQTT):
         #TODO: Update to parse json(?)
         print("Scheduling process")
         #print(updateInfo)
+
         try:
             if updateInfo[0] == "clear": self.event_list.clear()
-            else if updateInfo[1] == 10: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S.%f"))
-            else if updateInfo[1] == 8: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S"))
+            elif len(updateInfo[1]) == 10: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S.%f"))
+            elif len(updateInfo[1]) == 8: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S"))
             #else: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S"))
+
+        except:
+            pass
 
         self.event_list.sort()
         #print(self.event_list)
@@ -94,7 +98,7 @@ class NeruHandler(CoAP, Process):
                 #print(diff)
                 if diff <= 0.0001: return True # Accuracy within 1 ms (approx.)
 
-        for event in self.event_list:
+        for event in list(self.event_list):
             #loop = asyncio.new_event_loop()
             #asyncio.set_event_loop(loop)
             if wait_until(event):
@@ -119,8 +123,8 @@ class NeruHandler(CoAP, Process):
                 #asyncio.get_event_loop().run_until_complete(asyncio.gather(self.dispatchDisturbanceMessages(disturbance.encode("utf-8")), self.mqtt_dispatch(disturbance)))
                 #self.dispatchDisturbanceMessage(disturbance)
                 publish_queue.send(disturbance)
-                await asyncio.wait_for(self.dispatchDisturbanceMessages(disturbance.encode("utf-8")), timeout=0.3) #, self.mqtt_dispatch(disturbance))
-
+                try: await asyncio.wait_for(self.dispatchDisturbanceMessages(disturbance.encode("utf-8")), timeout=0.3) #, self.mqtt_dispatch(disturbance))
+                except: pass
     '''def arrivalFunction(self, data):
         self.arrivalMessage(data)'''
 
@@ -175,7 +179,8 @@ if __name__ == "__main__":
         #p = Thread(target=neruhandler.dispatchDisturbanceMessage, args=(disturbance,))
         #p.start()
         publish_queue.send(disturbance)
-        await asyncio.wait_for(neruhandler.dispatchDisturbanceMessages(disturbance.encode("utf-8")), timeout=0.3)
+        try: await asyncio.wait_for(neruhandler.dispatchDisturbanceMessages(disturbance.encode("utf-8")), timeout=0.3)
+        except: pass
         #await asyncio.gather(neruhandler.dispatchDisturbanceMessages(disturbance.encode("utf-8")))
         #await neruhandler.dispatchDisturbanceMessages(disturbance.encode("utf-8"))
         #p.join()
