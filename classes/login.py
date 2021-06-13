@@ -42,10 +42,32 @@ class Session:
         
         self.idToken = reqJson['idToken']
         self.refreshToken = reqJson["refreshToken"]
-        self.uid = reqJson["uid"]
-        self.tokenDuration = reqJson["expiresIn"]
+    def chooseSite(self):
         
+        while True:
+            siteIndex = input("Choose a site number: ")
         
+            if siteIndex >= 0 and siteIndex < len(self.sites):
+                break
+            
+            print("Number entered was out of bounds. Try again.")
+        
+        data = {
+            "token": self.idToken,
+            "site": self.sites[siteIndex],
+            "lat": CommonValues.deviceLat,
+            "lon": CommonValues.deviceLon,
+            "ip": CommonValues.getPublicIP(),
+        }
+        
+        req = requests.post(Session.chooseSiteUrl, data=data)
+        
+        if req.status_code == 200:
+            print("Initialisation successful. Starting NERU Software..")
+        else:
+            print("Error choosing site")
+            raise SystemExit
+    
     def refreshIdToken(self):
 
         data = {
