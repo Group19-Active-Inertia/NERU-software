@@ -9,9 +9,11 @@ class Session:
         "nerus": "items"
     }
     
+    loginUrl = "https://www.neru-api.herokuapp.com/nerulogin"
+    chooseSiteUrl = "https://www.neru-api.herokuapp.com/choosesite"
+    
     apiKey = "AIzaSyBkpEDGlj06SVpYzIbNr2KCIGfYhXBGysE"
     projectId = "create-active-inertia"
-    loginUrl = f"https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key={apiKey}"
     refreshTokenUrl = f"https://securetoken.googleapis.com/v1/token?key={apiKey}"
     nerusUrl = f"https://create-active-inertia-default-rtdb.europe-west1.firebasedatabase.app/{endpointNames['nerus']}.json"
     
@@ -25,8 +27,7 @@ class Session:
         while True:
             data = {
                 "email": input("Email: "),
-                "password": getpass("Password: "),
-                "returnSecureToken": "true"
+                "password": getpass("Password: ")
             }
         
             req = requests.post(Session.loginUrl,data=data)
@@ -41,7 +42,7 @@ class Session:
         
         self.idToken = reqJson['idToken']
         self.refreshToken = reqJson["refreshToken"]
-        self.uid = reqJson["localId"]
+        self.uid = reqJson["uid"]
         self.tokenDuration = reqJson["expiresIn"]
         
         
