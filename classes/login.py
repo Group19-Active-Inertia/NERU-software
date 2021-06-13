@@ -1,3 +1,5 @@
+from .common import CommonValues
+
 import json
 import requests
 from getpass import getpass
@@ -15,12 +17,12 @@ class Session:
     apiKey = "AIzaSyBkpEDGlj06SVpYzIbNr2KCIGfYhXBGysE"
     projectId = "create-active-inertia"
     refreshTokenUrl = f"https://securetoken.googleapis.com/v1/token?key={apiKey}"
-    nerusUrl = f"https://create-active-inertia-default-rtdb.europe-west1.firebasedatabase.app/{endpointNames['nerus']}.json"
+    nerusUrl = f"https://create-active-inertia-default-rtdb.europe-west1.firebasedatabase.app/{endpointNames['nerus']}.json?auth={self.idToken}"
     
     def __init__(self):
-        self.tokenId = None
+        self.sites = None
+        self.idToken = None
         self.refreshToken = None
-        self.uid = None
         self.tokenDuration = None
 
     def attemptLogin(self):
@@ -30,7 +32,7 @@ class Session:
                 "password": getpass("Password: ")
             }
         
-            req = requests.post(Session.loginUrl,data=data)
+            req = requests.post(Session.loginUrl, data=data)
             
             if req.status_code == 200:
                 print("Login successful.")
@@ -40,8 +42,18 @@ class Session:
 
         reqJson = req.json()
         
+        self.sites = reqJson["sites"]
         self.idToken = reqJson['idToken']
         self.refreshToken = reqJson["refreshToken"]
+        self.tokenDuration = reqJson["tokenExpiresIn"]
+        
+        sitesPrintFormat = ""
+        
+        for index, site in zip( range(len(reqJson["sites"])), reqJson["sites"] ):
+            sitesPrintFormat += f"[ {index} ] {site}"
+                        
+        print(sitesPrintFormat)
+    
     def chooseSite(self):
         
         while True:
@@ -80,18 +92,7 @@ class Session:
         
         self.idToken = reqJson['id_token']
         self.refreshToken = reqJson["refresh_token"]
-        self.uid = reqJson["localId"]
         self.tokenDuration = reqJson["expires_in"]
-        
-        
-    def getAllowedSites(self):
-        pass
-
-    def updateLocalSiteIP(self):
-        pass
-
-    def getMQTTFiles(self):
-        pass
 
     def getNeruIPs(self):
         req = requests.get(Session.nerusUrl)
@@ -99,3 +100,4 @@ class Session:
 
     def getNeruDetails(self):
         pass
+
