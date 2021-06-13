@@ -1,4 +1,5 @@
 from math import acos, sin, cos, pi
+import requests
 
 # This class is used in common with all other modules
 # it is added so information does not have to be passed
@@ -32,6 +33,9 @@ class CommonValues:
     # set device ID
     def setDeviceID(name):
         CommonValues.device_id_1 = name
+        
+    def getPublicIP():
+        return requests.get('https://api.ipify.org').text
 
     # calculate nearby nerus from dict of nerus
     # nerus format: {ip: [port, lat, lon]}
