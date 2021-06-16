@@ -1,4 +1,5 @@
 from .common import CommonValues
+from multiprocessing import Value, Manager
 
 import os, sys
 from io import StringIO
@@ -213,4 +214,32 @@ class MQTT():
             )
         except:
             raise MQTTPublishException
+            
+            
+class MQTTScheduler(MQTT):
+
+    def __init__(self, status, event_list, *args): #, result_queue):
+        self.status = status
+        self.event_list = event_list
+        #self.result_queue = result_queue
+        super().__init__(*args)
+
+    def scheduler_update(self, updateInfo):
+        #Parse string updateInfo into datetime format
+        #TODO: Update to parse json(?)
+        print("Scheduling process")
+        #print(updateInfo)
+
+        try:
+            if updateInfo[0] == "clear": self.event_list.clear()
+            elif len(updateInfo[1]) == 10: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S.%f"))
+            elif len(updateInfo[1]) == 8: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S"))
+            #else: self.event_list.append(datetime.datetime.strptime(" ".join(updateInfo), "%Y-%m-%d %H:%M:%S"))
+
+        except:
+            pass
+
+        self.event_list.sort()
+        #print(self.event_list)
+        self.status.value = 1
 
