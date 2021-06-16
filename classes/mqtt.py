@@ -74,12 +74,11 @@ class MQTT():
 
     def getBrokerCredentials(self):
         try:
-            cwd = os.path.dirname(os.path.abspath(__file__))
             self.brokerInfo["host"] = "a3ccusvtjpdwda-ats.iot.eu-west-2.amazonaws.com"
             self.brokerInfo["port"] = 8883
-            self.brokerInfo["rootCA"] = os.path.join(cwd,"Amazon-root-CA-1.pem")
-            self.brokerInfo["privateKey"] = os.path.join(cwd,"private.pem.key")
-            self.brokerInfo["certificate"] = os.path.join(cwd,"device.pem.crt")
+            self.brokerInfo["rootCA"] = CommonValues.certificatePaths["rootCA"]
+            self.brokerInfo["privateKey"] = CommonValues.certificatePaths["privateKey"]
+            self.brokerInfo["certificate"] = CommonValues.certificatePaths["certificate"]
             self.brokerInfo["clientId"] = ""
             self.brokerInfo["disturbanceTopic"] = "iot/topic"
             self.brokerInfo["qosDisturbance"] = 0
