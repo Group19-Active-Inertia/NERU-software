@@ -1,5 +1,5 @@
 from math import acos, sin, cos, pi
-import requests
+import requests, os
 
 # This class is used in common with all other modules
 # it is added so information does not have to be passed
@@ -8,6 +8,14 @@ class CommonValues:
     # radius in km
     nearbyNERURadius = 100
     nearbyNERUs = []
+    
+    # file paths to mqtt certificates, used by multiple modules
+    cwd = os.getcwd()
+    certificatePaths = {
+        "rootCA": os.path.join(cwd,"certs","Amazon-root-CA-1.pem"),
+        "privateKey": os.path.join(cwd,"certs","private.pem.key"),
+        "certificate": os.path.join(cwd,"certs","device.pem.crt")        
+    }
 
     # local NERU device location. Accuracy depends on distance
     # Within the UK: ± <1km error. Error increases to a few km for >3000km distances
