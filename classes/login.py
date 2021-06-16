@@ -101,18 +101,16 @@ class Session:
             
             raise SystemExit
     
-    def refreshIdToken(self):
-
-        data = {
-            "grant_type": "refresh_token",
-            "refresh_token": self.refreshToken,
-        }
-        
-        req = requests.post(refreshTokenUrl, data=data)
-        reqJson = req.json()
-        
-        self.idToken = reqJson['id_token']
-        self.refreshToken = reqJson["refresh_token"]
+    def saveMQTTSecretsToFile(self, data):
+        with open(CommonValues.certificatePaths["certificate"], "w") as file:
+            file.write(data["certificatePem"])
+            
+        with open(CommonValues.certificatePaths["rootCA"], "w") as file:
+            file.write(data["amazonRootCA1"])
+            
+        with open(CommonValues.certificatePaths["privateKey"], "w") as file:
+            file.write(data["privateKey"])
+    
         self.tokenDuration = reqJson["expires_in"]
 
     def getNeruIPs(self):
