@@ -71,7 +71,7 @@ class CoAPDisturbance(resource.Resource, MQTT):
                     "device_id_1": CommonValues.device_id_1,
                     "message received": msg,
                     "message type": "CoAP",
-                    "duration":  str(date - datetime.datetime.strptime(msg["time"], "%Y-%m-%d %H:%M:%S.%f")),
+                    "delay":  str(date - datetime.datetime.strptime(msg["time"], "%Y-%m-%d %H:%M:%S.%f")),
                     "time": str(date)
                   })
 

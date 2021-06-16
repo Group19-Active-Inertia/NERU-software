@@ -154,7 +154,7 @@ class MQTT():
                     "device_id_1": CommonValues.device_id_1,
                     "message received": msgRecv,
                     "message type": "MQTT",
-                    "duration":  str(date - datetime.datetime.strptime(msgRecv["time"], "%Y-%m-%d %H:%M:%S.%f")),
+                    "delay":  str(date - datetime.datetime.strptime(msgRecv["time"], "%Y-%m-%d %H:%M:%S.%f")),
                     "time": str(date)
                 })
 
