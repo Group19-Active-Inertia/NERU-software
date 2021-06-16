@@ -128,3 +128,7 @@ class Session:
             self.tokenDuration = int(reqJson["expires_in"])
             
         threading.Thread(target=refreshIdToken).start()
+
+    def getNeruIPs(self):
+        req = requests.get(Session.nerusUrl.format(self.idToken))
+        return req.json()
