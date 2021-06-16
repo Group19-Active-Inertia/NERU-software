@@ -1,5 +1,6 @@
 from .common import CommonValues
-CommonValues.setKey(b"OjJ_mLzQdA2tR-rjjjhh3XTFtTqPRZWfY49v96cOOIo=")
+
+if __name__ == "__main__": CommonValues.setKey(b"OjJ_mLzQdA2tR-rjjjhh3XTFtTqPRZWfY49v96cOOIo=")
 
 from .coap import CoAP
 from .mqtt import MQTTScheduler
