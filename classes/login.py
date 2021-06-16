@@ -27,16 +27,23 @@ class Session:
 
     def attemptLogin(self):
         while True:
-            data = {
-                "email": input("Email: "),
-                "password": getpass("Password: ")
-            }
+            
+            email = input("Email: ")
+            password = getpass("Password: ")
         
-            req = requests.post(Session.loginUrl, data=data)
+            data = {
+                "email": email,
+                "password": password
+            }
+            
+            dataToPost = json.dumps(data)
+        
+            req = requests.post(Session.loginUrl, data=dataToPost)
             
             if req.status_code == 200:
                 print("Login successful.")
                 break
+            
             else:
                 print("Wrong credentials. Try again.")
 
@@ -45,13 +52,15 @@ class Session:
         self.sites = reqJson["sites"]
         self.idToken = reqJson['idToken']
         self.refreshToken = reqJson["refreshToken"]
-        self.tokenDuration = reqJson["tokenExpiresIn"]
+        self.tokenDuration = int(reqJson["tokenExpiresIn"])
         
+        # Initialise string
         sitesPrintFormat = ""
         
         for index, site in zip( range(len(reqJson["sites"])), reqJson["sites"] ):
-            sitesPrintFormat += f"[ {index} ] {site}"
+            sitesPrintFormat += f"[ {index} ] {site}\n"
                         
+        # prints on purpose
         print(sitesPrintFormat)
     
     def chooseSite(self):
