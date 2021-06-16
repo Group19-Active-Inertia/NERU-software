@@ -1,5 +1,9 @@
 from math import acos, sin, cos, pi
+<<<<<<< HEAD
 #from multiprocessing import Array
+=======
+import requests
+>>>>>>> 820da21d0fca0975d6f4ef1b80841228878130bf
 
 # This class is used in common with all other modules
 # it is added so information does not have to be passed
@@ -34,6 +38,9 @@ class CommonValues:
     # set device ID
     def setDeviceID(name):
         CommonValues.device_id_1 = name
+        
+    def getPublicIP():
+        return requests.get('https://api.ipify.org').text
 
     def setKey(key):
         CommonValues.symmetric_key = key
