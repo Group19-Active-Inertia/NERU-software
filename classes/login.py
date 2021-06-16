@@ -111,12 +111,20 @@ class Session:
         with open(CommonValues.certificatePaths["privateKey"], "w") as file:
             file.write(data["privateKey"])
     
-        self.tokenDuration = reqJson["expires_in"]
-
-    def getNeruIPs(self):
-        req = requests.get(Session.nerusUrl)
-        return req.json()
-
-    def getNeruDetails(self):
-        pass
-
+    def continuouslyRefreshIdToken(self):
+        def refreshIdToken():
+            time.sleep(self.tokenDuration-5)
+            
+            data = {
+                "grant_type": "refresh_token",
+                "refresh_token": self.refreshToken,
+            }
+            
+            req = requests.post(refreshTokenUrl, data=data)
+            reqJson = req.json()
+            
+            self.idToken = reqJson['id_token']
+            self.refreshToken = reqJson["refresh_token"]
+            self.tokenDuration = int(reqJson["expires_in"])
+            
+        threading.Thread(target=refreshIdToken).start()
