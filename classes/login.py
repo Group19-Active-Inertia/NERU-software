@@ -130,3 +130,6 @@ class Session:
     def getNeruIPs(self):
         req = requests.get(Session.nerusUrl.format(self.idToken))
         return req.json()
+    
+    def neruList(self):
+        return []
