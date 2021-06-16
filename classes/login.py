@@ -6,18 +6,16 @@ from getpass import getpass
 import time
 import threading
 
+# This class handles all communication where a Firebase ID Token is necessary.
 class Session:
-    endpointNames = {
-        "nerus": "items"
-    }
     
-    loginUrl = "https://www.neru-api.herokuapp.com/nerulogin"
-    chooseSiteUrl = "https://www.neru-api.herokuapp.com/choosesite"
+    loginUrl = "https://neru-api.herokuapp.com/nerulogin"
+    chooseSiteUrl = "https://neru-api.herokuapp.com/choosesite"
     
     apiKey = "AIzaSyBkpEDGlj06SVpYzIbNr2KCIGfYhXBGysE"
     projectId = "create-active-inertia"
     refreshTokenUrl = f"https://securetoken.googleapis.com/v1/token?key={apiKey}"
-    nerusUrl = f"https://create-active-inertia-default-rtdb.europe-west1.firebasedatabase.app/{endpointNames['nerus']}.json?auth={self.idToken}"
+    nerusUrl = "https://create-active-inertia-default-rtdb.europe-west1.firebasedatabase.app/nerus.json?auth={}"
     
     def __init__(self):
         self.sites = None
