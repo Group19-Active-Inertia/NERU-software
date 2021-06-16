@@ -1,5 +1,10 @@
 from classes.login import Session
 
-x = Session()
-x.attemptLogin()
-x.chooseSite()
+s = Session()
+s.attemptLogin()
+
+# Start CoAP server here
+
+s.chooseSite()
+
+# start rest of modules here
