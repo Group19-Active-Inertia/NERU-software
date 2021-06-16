@@ -131,5 +131,6 @@ class Session:
         req = requests.get(Session.nerusUrl.format(self.idToken))
         return req.json()
     
+    #TODO: Add functionality to get existing NERUs registered on database (except for self/current NERU instance)
     def neruList(self):
         return []
