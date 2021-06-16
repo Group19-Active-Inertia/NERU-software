@@ -5,11 +5,33 @@ This repository contains the software meant to be run on NERU units to communica
 
 ### Example disturbance message
 
+{
+      "Latitude" : 37.9838,
+      "Longitude" : 23.7275,
+      "device_id_1" : "Athens 1",
+      "time" : "2021-06-12 12:01:30.001206",
+      "type" : "Phase Shift"
+}
 
 ### Example arrival message
 
+{
+    "device_id_1" : "Newcastle 1",
+    "delay" : "0:00:00.010506",
+    "message received" : {
+      "Latitude" : 37.9838,
+      "Longitude" : 23.7275,
+      "device_id_1" : "Athens 1",
+      "time" : "2021-06-12 12:01:30.001206",
+      "type" : "Phase Shift"
+    },
+    "message type" : "CoAP",
+    "time" : "2021-06-12 12:01:30.011712"
+}
 
 ### Example scheduling message
+
+sched 2021-06-04 12:01:30
 
 
 ## Folder layout
