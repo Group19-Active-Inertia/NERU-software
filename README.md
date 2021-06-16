@@ -44,20 +44,20 @@ The NERU communicates with the database, sending messages containing details abo
 
 Clone the repository on your machine using the following command. Make sure that you have git installed for this step:
 
-'''
+```
 git clone https://github.com/Group19-Active-Inertia/NERU-software
-'''
+```
 
 Ensure that you have you latest version of python and proceed to download the required dependencies with the following command:
 
-'''
+```
 pip3 install -r requirements.txt
-'''
+```
 
 You can then run the program as follows:
 
-'''
+```
 python3 main.py
-'''
+```
 
-For best results, you should have a time service/daemon to maintain good accuracy for your clock, such as ntpd or chrony. This is important for accurate delay measurement. For our simulations we used Raspberry Pi units to simulate the NERUs. These units had chrony installed and used PPS capable GPS receivers (In the form of a Raspberry Pi Hardware Attached on Top (HAT) device) as a time source to discipline the system clock and achieve nanosecond accuracy.
+For best results, you should have a time service/daemon to maintain good accuracy for your clock, such as ntpd or chrony. This is important for accurate delay measurement. For our simulations we used Raspberry Pi units to simulate the NERUs. These units had chrony installed and used PPS capable GPS receivers (In the form of a Raspberry Pi Hardware Attached on Top (HAT) device) as a time source to discipline the system clock and achieve microsecond accuracy (KPPS). However, even just using a time daemon like chrony can help achieve millisecond accuracy, which is satisfactory for the purposes of delay measurement.
