@@ -66,12 +66,18 @@ class Session:
     def chooseSite(self):
         
         while True:
-            siteIndex = input("Choose a site number: ")
-        
-            if siteIndex >= 0 and siteIndex < len(self.sites):
-                break
-            
-            print("Number entered was out of bounds. Try again.")
+            try:
+                siteIndex = int(input("Choose a site number: "))
+                
+                if siteIndex >= 0 and siteIndex < len(self.sites):
+                    print(f"Configuring NERU for {self.sites[siteIndex]}...")
+                    break
+                
+                else:
+                    print("Number entered was out of bounds. Try again.")
+                    
+            except:
+                print("Please enter a number.")
         
         data = {
             "token": self.idToken,
@@ -81,12 +87,18 @@ class Session:
             "ip": CommonValues.getPublicIP(),
         }
         
-        req = requests.post(Session.chooseSiteUrl, data=data)
+        dataToSend = json.dumps(data)
+        
+        req = requests.post(Session.chooseSiteUrl, data=dataToSend)
         
         if req.status_code == 200:
-            print("Initialisation successful. Starting NERU Software..")
+            print("Configuration was successful.")
+            self.saveMQTTSecretsToFile(req.json())
+            
         else:
-            print("Error choosing site")
+            print("Error configuring site.")
+            print(req.json())
+            
             raise SystemExit
     
     def refreshIdToken(self):
