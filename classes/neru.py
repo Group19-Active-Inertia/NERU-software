@@ -1,9 +1,14 @@
-from .common import CommonValues
+if __name__ == "__main__":
+    from common import CommonValues
+    CommonValues.setKey(b"OjJ_mLzQdA2tR-rjjjhh3XTFtTqPRZWfY49v96cOOIo=")
+    from coap import CoAP
+    from mqtt import MQTTScheduler
 
-if __name__ == "__main__": CommonValues.setKey(b"OjJ_mLzQdA2tR-rjjjhh3XTFtTqPRZWfY49v96cOOIo=")
+else:
+    from .common import CommonValues
+    from .coap import CoAP
+    from .mqtt import MQTTScheduler
 
-from .coap import CoAP
-from .mqtt import MQTTScheduler
 import threading
 import json
 import datetime, time
