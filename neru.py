@@ -1,6 +1,8 @@
+from classes.common import CommonValues
+CommonValues.setKey(b"OjJ_mLzQdA2tR-rjjjhh3XTFtTqPRZWfY49v96cOOIo=")
+
 from classes.coap import CoAP
 from classes.mqtt import MQTT
-from classes.common import CommonValues
 import threading
 import json
 import datetime, time
@@ -108,7 +110,7 @@ class NeruHandler(CoAP, Process):
                     'Longitude': CommonValues.deviceLon,
                     'device_id_1': CommonValues.device_id_1,
                     'time': str(datetime.datetime.now()),
-                    'type': 'Other type 1'
+                    'type': 'Phase shift'
                 })
                 '''disturbance =  json.dumps({
                      'CurrentIP': self._ip,
@@ -127,7 +129,6 @@ class NeruHandler(CoAP, Process):
                 except: pass
     '''def arrivalFunction(self, data):
         self.arrivalMessage(data)'''
-
 
 if __name__ == "__main__":
 
@@ -171,7 +172,7 @@ if __name__ == "__main__":
                 'Longitude': CommonValues.deviceLon,
                 'device_id_1': CommonValues.device_id_1,
                 'time': str(datetime.datetime.now()),
-                'type': 'Other type 1'
+                'type': 'Phase shift'
         })
 
 

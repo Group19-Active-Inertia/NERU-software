@@ -1,4 +1,5 @@
 from math import acos, sin, cos, pi
+#from multiprocessing import Array
 
 # This class is used in common with all other modules
 # it is added so information does not have to be passed
@@ -13,6 +14,7 @@ class CommonValues:
     # Coordinates below are of Imperial's EEE building
     deviceLat, deviceLon = 54.975123382631736, -1.6478403158353487
     device_id_1 = "Newcastle 1"
+    symmetric_key = None # = Array('b', 1)
     # calculates euclidean distance from host neru location to point
     def euclideanDistance(lat, lon):
         rlat1, rlon1, rlat2, rlon2 = (
@@ -32,6 +34,9 @@ class CommonValues:
     # set device ID
     def setDeviceID(name):
         CommonValues.device_id_1 = name
+
+    def setKey(key):
+        CommonValues.symmetric_key = key
 
     # calculate nearby nerus from dict of nerus
     # nerus format: {ip: [port, lat, lon]}
