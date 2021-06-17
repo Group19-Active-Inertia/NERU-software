@@ -17,11 +17,15 @@ class Session:
     refreshTokenUrl = f"https://securetoken.googleapis.com/v1/token?key={apiKey}"
     nerusUrl = "https://create-active-inertia-default-rtdb.europe-west1.firebasedatabase.app/nerus.json?auth={}"
     
+    localNeruUrl = "https://create-active-inertia-default-rtdb.europe-west1.firebasedatabase.app/nerus/{}.json?auth={}"
+    
     def __init__(self):
         self.sites = None
         self.idToken = None
         self.refreshToken = None
         self.tokenDuration = None
+        self.localSite = None
+        self.coapPort = None
 
     def attemptLogin(self):
         while True:
@@ -68,7 +72,9 @@ class Session:
                 siteIndex = int(input("Choose a site number: "))
                 
                 if siteIndex >= 0 and siteIndex < len(self.sites):
-                    print(f"Configuring NERU for {self.sites[siteIndex]}...")
+                    self.localSite = self.sites[siteIndex]
+                    
+                    print(f"Configuring NERU for {self.localSite}...")
                     break
                 
                 else:
@@ -94,14 +100,16 @@ class Session:
             data = req.json()
             self.saveMQTTSecretsToFile(data)
             self.continuouslyRefreshIdToken()
-            CommonValues.symmetric_key = data["aesKey"]
+            self.coapPort = getLocalNeruPort()
+            CommonValues.setKey(data["aesKey"])
             
         else:
             print("Error configuring site.")
             print(req.json())
             
             raise SystemExit
-    
+        
+    # Saves certificates and key into files
     def saveMQTTSecretsToFile(self, data):
         with open(CommonValues.certificatePaths["certificate"], "w") as file:
             file.write(data["certificatePem"])
@@ -112,6 +120,12 @@ class Session:
         with open(CommonValues.certificatePaths["privateKey"], "w") as file:
             file.write(data["privateKey"])
     
+    # Gets the port of the chosen neru from firebase
+    def getLocalNeruPort(self):
+        req = requests.get(Session.nerusUrl.format(self.localSitem, self.idToken)).json()
+        return req["Port"]
+    
+    # continuously refreshes the firebase idToken
     def continuouslyRefreshIdToken(self):
         def refreshIdToken():
             time.sleep(self.tokenDuration-5)
@@ -130,10 +144,27 @@ class Session:
             
         threading.Thread(target=refreshIdToken).start()
 
-    def getNeruIPs(self):
+    # gets list of all NERUs from firebase as a dictionary
+    # format:
+    # {
+    #    "Aberdeen": {
+    #       "CurrentIP": "57.129.89.99"
+    #       "Latitude": 51.52453425
+    #       "Longitude": -7.0234756
+    #       "Name": "Aberdeen"
+    #       "Online": true
+    #       "Port": 5836
+    #    }
+    #    "Nottingham": {
+    #       "CurrentIP": "27.99.80.208"
+    #       "Latitude": 53.57213385
+    #       "Longitude": -6.22028973
+    #       "Name": "Nottingham"
+    #       "Online": true
+    #       "Port": 8893
+    #    }
+    #    ...
+    # }
+    def getNeruList(self):
         req = requests.get(Session.nerusUrl.format(self.idToken))
         return req.json()
-    
-    #TODO: Add functionality to get existing NERUs registered on database (except for self/current NERU instance)
-    def neruList(self):
-        return []
