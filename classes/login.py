@@ -91,7 +91,10 @@ class Session:
         
         if req.status_code == 200:
             print("Configuration was successful.")
-            self.saveMQTTSecretsToFile(req.json())
+            data = req.json()
+            self.saveMQTTSecretsToFile(data)
+            self.continuouslyRefreshIdToken()
+            CommonValues.symmetric_key = data["aesKey"]
             
         else:
             print("Error configuring site.")
