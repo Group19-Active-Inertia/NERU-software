@@ -5,6 +5,7 @@ This repository contains the software meant to be run on NERU units to communica
 
 ### Example disturbance message
 
+```
 {
       "Latitude" : 37.9838,
       "Longitude" : 23.7275,
@@ -12,9 +13,11 @@ This repository contains the software meant to be run on NERU units to communica
       "time" : "2021-06-12 12:01:30.001206",
       "type" : "Phase Shift"
 }
+```
 
 ### Example arrival message
 
+```
 {
     "device_id_1" : "Newcastle 1",
     "delay" : "0:00:00.010506",
@@ -28,11 +31,13 @@ This repository contains the software meant to be run on NERU units to communica
     "message type" : "CoAP",
     "time" : "2021-06-12 12:01:30.011712"
 }
+```
 
 ### Example scheduling message
 
+```
 sched 2021-06-04 12:01:30
-
+```
 
 ## Folder layout
 
@@ -47,7 +52,7 @@ Contains unit tests.
 
 
 ## Communication between database
-The NERU communicates with the database, sending messages containing details about detected inertia events. It sends these messages to nearby NERUs using CoAP, and all NERUs in the network using MQTT (on the 'iot/topic' topic). The MQTT broker then forwards these messages to the database. In order to authenticate a NERU machine and update its information (such as its ID or Longitude and Latitude) on the database, the NERU also communicates with the database. On arrival of a message a delay value is also calculated and this is sent via MQTT to the broker (on the 'firebase' topic). NERUs are also able to receive commands (in the form of MQTT messages) to schedule a disturbance to be simulated at an appointed time in the future (on the 'update' topic).
+The NERU communicates with the database, sending messages containing details about detected inertia events. It sends these messages to nearby NERUs using CoAP, and all NERUs in the network using MQTT (on the 'iot/topic' topic). The MQTT broker then forwards these messages to the database by routing them to an AWS Lambda function. In order to authenticate a NERU machine and update its information (such as its ID or Longitude and Latitude) on the database, the NERU also communicates with the database. On arrival of a message a delay value is also calculated and this is sent via MQTT to the broker (on the 'firebase' topic). NERUs are also able to receive commands (in the form of MQTT messages) to schedule a disturbance to be simulated at an appointed time in the future (on the 'update' topic).
 
 ### Data read from database by the NERU
 1. All NERU IPs, corresponding ports, latitude and longitude. 

@@ -26,6 +26,9 @@ class CommonValues:
     device_id_1 = "Newcastle 1"
     symmetric_key = None # = Array('b', 1)
     
+    port = None
+    ip = None
+    
     # calculates euclidean distance from host neru location to point
     def euclideanDistance(lat, lon):
         rlat1, rlon1, rlat2, rlon2 = (
@@ -40,7 +43,6 @@ class CommonValues:
                 sin(rlat1) * sin(rlat2) + cos(rlat1) * cos(rlat2) * cos(rlon2 - rlon1)
             )
         )
-
 
     # set device ID
     def setDeviceID(name):
